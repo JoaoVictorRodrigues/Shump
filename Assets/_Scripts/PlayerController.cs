@@ -8,7 +8,7 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
     Animator animator;
     GameManager gm;
 
-    private int lifes;
+    public int lifes;
     public AudioClip shootSFX;
 
     public GameObject bullet;
@@ -19,7 +19,7 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
 
     private void Start(){
         animator = GetComponent<Animator>();
-        lifes = 2;
+        //gm.vidas = 2;
         gm = GameManager.GetInstance();
     }
 
@@ -29,13 +29,12 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
         AudioManager.PlaySFX(shootSFX);
         _lastShootTimestamp = Time.time;
         Instantiate(bullet, arma.position, Quaternion.identity);
-       // throw new System.NotImplementedException();
     }
 
     public void TakeDamage()
     {
-        lifes--;
-        if(lifes<=0){
+        gm.vidas--;
+        if(gm.vidas<=0 && gm.gameState == GameManager.GameState.GAME){
             Die();
             gm.changeState(GameManager.GameState.END);
         }
@@ -48,6 +47,7 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
 
     void FixedUpdate()
     {
+        if(gm.gameState != GameManager.GameState.GAME) return;
         float yInput = Input.GetAxis("Vertical");
         float xInput = Input.GetAxis("Horizontal");
         Thrust(xInput, yInput);
@@ -71,5 +71,4 @@ public class PlayerController : SteerableBehaviour, IShooter, IDamageable
             Destroy(other.gameObject);
         }
     }
-    
 }

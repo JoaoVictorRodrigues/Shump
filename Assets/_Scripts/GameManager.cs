@@ -10,10 +10,13 @@ public class GameManager
     public delegate void ChangeStateDelegate();
     public static ChangeStateDelegate changeStateDelegate;
 
+    public int vidas;
+
     private static GameManager _instance;
 
     private GameManager(){
-        gameState = GameState.GAME;
+        gameState = GameState.MENU;
+        vidas = 3;
     }
 
     public static GameManager GetInstance(){
@@ -26,5 +29,9 @@ public class GameManager
     public void changeState(GameState nextState){
         gameState = nextState;
         changeStateDelegate();
+    }
+    private void Reset(){
+        vidas = 3;
+        //pontos = 0;
     }
 }
